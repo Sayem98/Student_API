@@ -60,6 +60,9 @@ from .serializers import StudentSerializer
 
 # ======== class based api view =========
 
+# Generic api view in generic branch.
+
+
 class StudentView(APIView):
     def get(self, request, pk=None, format=None):
         id = pk
