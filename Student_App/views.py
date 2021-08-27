@@ -8,76 +8,88 @@ from .serializers import StudentSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, \
     RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework import viewsets
 
 
 # Create your views here.
 
+class StudentViewSet(viewsets.ViewSet):
+    def list(self, request):
+        print('***********List********')
+        print('Basename:', self.basename)
+        print('Action:', self.action)
+        print('Detail:', self.detail)
+        print('Suffix:', self.suffix)
+        print('Name:', self.name)
+        print('Description', self.description)
+        stu = StudentModel.objects.all()
+        serializer = StudentSerializer(stu, many=True)
+        return Response(serializer.data)
 
-# ============== GenericAPIView class  and model Mixins =================
-# class StudentList(GenericAPIView, ListModelMixin):
-#     queryset = StudentModel.objects.all()
-#     serializer_class = StudentSerializer
-#
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-#
-#
-# class StudentCreate(GenericAPIView, CreateModelMixin):
-#     queryset = StudentModel.objects.all()
-#     serializer_class = StudentSerializer
-#
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-#
-#
-# class StudentRetrive(GenericAPIView, RetrieveModelMixin):
-#     queryset = StudentModel.objects.all()
-#     serializer_class = StudentSerializer
-#
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-#
-#
-# class StudentUpdate(GenericAPIView, UpdateModelMixin):
-#     queryset = StudentModel.objects.all()
-#     serializer_class = StudentSerializer
-#
-#     def put(self, request, *args, **kwargs):
-#         return self.update(request, *args, **kwargs)
-#
-#
-# class StudentDestroy(GenericAPIView, DestroyModelMixin):
-#     queryset = StudentModel.objects.all()
-#     serializer_class = StudentSerializer
-#
-#     def delete(self, request, *args, **kwargs):
-#         return self.destroy(request, *args, **kwargs)
+    def retrieve(self, request, pk=None):
+        print('***********Retrieve********')
+        print('Basename:', self.basename)
+        print('Action:', self.action)
+        print('Detail:', self.detail)
+        print('Suffix:', self.suffix)
+        print('Name:', self.name)
+        print('Description', self.description)
+        stu = StudentModel.objects.get(id=pk)
+        serializer = StudentSerializer(stu)
+        return Response(serializer.data)
 
+    def create(self, request):
+        print('***********Create********')
+        print('Basename:', self.basename)
+        print('Action:', self.action)
+        print('Detail:', self.detail)
+        print('Suffix:', self.suffix)
+        print('Name:', self.name)
+        print('Description', self.description)
+        deserializer = StudentSerializer(request.data)
+        if deserializer.is_valid():
+            deserializer.save()
+            return Response({'msg': 'Student created'}, status=status.HTTP_201_CREATED)
+        return Response(deserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# ===== Model Mixin and Generic api view together..=====
-# List and create.
-class AllStudentView(GenericAPIView, ListModelMixin, CreateModelMixin):
-    queryset = StudentModel.objects.all()
-    serializer_class = StudentSerializer
+    def update(self, request, pk):
+        print('***********Update********')
+        print('Basename:', self.basename)
+        print('Action:', self.action)
+        print('Detail:', self.detail)
+        print('Suffix:', self.suffix)
+        print('Name:', self.name)
+        print('Description', self.description)
+        stu = StudentModel.objects.get(id=pk)
+        deserializer = StudentSerializer(stu, data=request.data)
+        if deserializer.is_valid():
+            deserializer.save()
+            return Response({'msg': 'data updated'})
+        return Response(deserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    def partial_update(self, request, pk):
+        print('***********Partial Update********')
+        print('Basename:', self.basename)
+        print('Action:', self.action)
+        print('Detail:', self.detail)
+        print('Suffix:', self.suffix)
+        print('Name:', self.name)
+        print('Description', self.description)
+        stu = StudentModel.objects.get(id=pk)
+        deserializer = StudentSerializer(stu, data=request.data, partial=True)
+        if deserializer.is_valid():
+            deserializer.save()
+            return Response({'msg': 'Partial data updated'})
+        return Response(deserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-# Retrive , put, delete
-
-class SingleStudentView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
-    queryset = StudentModel.objects.all()
-    serializer_class = StudentSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    def destroy(self, request, pk):
+        print('***********Destroy********')
+        print('Basename:', self.basename)
+        print('Action:', self.action)
+        print('Detail:', self.detail)
+        print('Suffix:', self.suffix)
+        print('Name:', self.name)
+        print('Description', self.description)
+        stu = StudentModel.objects.get(id=pk)
+        stu.delete()
+        return Response({'msg': 'Data deleted'})
