@@ -5,100 +5,79 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .models import StudentModel
 from .serializers import StudentSerializer
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, \
+    RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 
 
 # Create your views here.
 
-# ====== Function based api view ==========
-# @api_view(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
-# def StudentsView(request, pk=None):
-#     if request.method == 'GET':
+
+# ============== GenericAPIView class  and model Mixins =================
+# class StudentList(GenericAPIView, ListModelMixin):
+#     queryset = StudentModel.objects.all()
+#     serializer_class = StudentSerializer
 #
-#         # id = request.data.get(id) Why? local variable id referenced before assignment.(P)--> get('id')
-#         # id = request.data.get('id')
-#         id = pk
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
 #
-#         if id is not None:
-#             stu = StudentModel.objects.get(id=id)
-#             serializer = StudentSerializer(stu)
-#             return Response(serializer.data)
-#         stu = StudentModel.objects.all()
-#         serializer = StudentSerializer(stu, many=True)
-#         return Response(serializer.data)
 #
-#     if request.method == 'POST':
-#         serializer = StudentSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'msg': 'Student added'}, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# class StudentCreate(GenericAPIView, CreateModelMixin):
+#     queryset = StudentModel.objects.all()
+#     serializer_class = StudentSerializer
 #
-#     if request.method == 'PUT':
-#         # id = request.data.get('id')
-#         stu = StudentModel.objects.get(pk=pk)
-#         serializer = StudentSerializer(stu, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'msg': 'data updated'})
-#         return Response(serializer.errors)
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
 #
-#     if request.method == 'DELETE':
-#         # id = request.data.get('id')
-#         stu = StudentModel.objects.get(pk=pk)
-#         stu.delete()
-#         return Response({'msg': 'data deleted'})
 #
-#     if request.method == 'PATCH':
-#         # id = request.data.get('id')
-#         stu = StudentModel.objects.get(pk=pk)
-#         serializer = StudentSerializer(stu, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'msg': 'partial data updated'})
-#         return Response(serializer.errors)
+# class StudentRetrive(GenericAPIView, RetrieveModelMixin):
+#     queryset = StudentModel.objects.all()
+#     serializer_class = StudentSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+#
+#
+# class StudentUpdate(GenericAPIView, UpdateModelMixin):
+#     queryset = StudentModel.objects.all()
+#     serializer_class = StudentSerializer
+#
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+#
+#
+# class StudentDestroy(GenericAPIView, DestroyModelMixin):
+#     queryset = StudentModel.objects.all()
+#     serializer_class = StudentSerializer
+#
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
 
 
-# ======== class based api view =========
+# ===== Model Mixin and Generic api view together..=====
+# List and create.
+class AllStudentView(GenericAPIView, ListModelMixin, CreateModelMixin):
+    queryset = StudentModel.objects.all()
+    serializer_class = StudentSerializer
 
-class StudentView(APIView):
-    def get(self, request, pk=None, format=None):
-        id = pk
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-        if id is not None:
-            stu = StudentModel.objects.get(id=id)
-            serializer = StudentSerializer(stu)
-            return Response(serializer.data)
-        stu = StudentModel.objects.all()
-        serializer = StudentSerializer(stu, many=True)
-        return Response(serializer.data)
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
-    def post(self, request, format=None):
-        serializer = StudentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'msg': 'Student added'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, pk, format=None):
-        # id = request.data.get('id')
-        stu = StudentModel.objects.get(pk=pk)
-        serializer = StudentSerializer(stu, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'msg': 'data updated'})
-        return Response(serializer.errors)
+# Retrive , put, delete
 
-    def patch(self, request, pk, format=None):
-        # id = request.data.get('id')
-        stu = StudentModel.objects.get(pk=pk)
-        serializer = StudentSerializer(stu, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'msg': 'partial data updated'})
-        return Response(serializer.errors)
+class SingleStudentView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    queryset = StudentModel.objects.all()
+    serializer_class = StudentSerializer
 
-    def delete(self, request, pk, format=None):
-        # id = request.data.get('id')
-        stu = StudentModel.objects.get(pk=pk)
-        stu.delete()
-        return Response({'msg': 'data deleted'})
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
