@@ -10,7 +10,7 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, \
     RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly, DjangoModelPermissions
 
 
 # Create your views here.
@@ -24,4 +24,6 @@ class StudentViewSet(viewsets.ModelViewSet):
     # permission_classes = [AllowAny]
     # when is staff is true.
     # permission_classes = [IsAdminUser]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    # for custom permissions from Admin site.
+    permission_classes = [DjangoModelPermissions]
