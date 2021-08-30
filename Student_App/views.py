@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, \
     IsAuthenticatedOrReadOnly, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from .CustomAuth import CustomAuth
 
 
 # Create your views here.
@@ -24,7 +25,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     # =======Authentications=====
     # authentication_classes = [BasicAuthentication] # Never use in deployment.
     # authentication_classes = [SessionAuthentication]
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [CustomAuth]
     # by admin panel token generate.
     # by cmd ---python manage.py drf_create_token user_1
     # by exposing an api endpoint By user.
@@ -40,7 +41,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     # same as django model permissions but unauthenticated user have view only.
     # permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
-
+# Custom Token creator /gettoken is called by user
 # class CustomAuthToken(ObtainAuthToken):
 #
 #     def post(self, request, *args, **kwargs):
