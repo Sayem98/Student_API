@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, \
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .CustomAuth import CustomAuth
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 # Create your views here.
@@ -25,7 +26,8 @@ class StudentViewSet(viewsets.ModelViewSet):
     # =======Authentications=====
     # authentication_classes = [BasicAuthentication] # Never use in deployment.
     # authentication_classes = [SessionAuthentication]
-    authentication_classes = [CustomAuth]
+    # authentication_classes = [CustomAuth]
+    authentication_classes = [JWTAuthentication]
     # by admin panel token generate.
     # by cmd ---python manage.py drf_create_token user_1
     # by exposing an api endpoint By user.
