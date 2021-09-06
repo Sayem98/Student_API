@@ -18,6 +18,7 @@ from .CustomAuth import CustomAuth
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.views import View
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from .throttling import StudentRateThrottle
 
 
 # Create your views here.
@@ -35,18 +36,19 @@ class StudentViewSet(viewsets.ModelViewSet):
     # by exposing an api endpoint By user.
 
     # ====== Permissions=========
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # permission_classes = [AllowAny]
     # when is staff is true.
     # permission_classes = [IsAdminUser]
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     # for custom permissions from Admin site.
     # permission_classes = [DjangoModelPermissions]
     # same as django model permissions but unauthenticated user have view only.
     # permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
     # =========Throttling==========
-
+    # throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    throttle_classes = [AnonRateThrottle, StudentRateThrottle]
 
 # Custom Token creator /gettoken is called by user
 # class CustomAuthToken(ObtainAuthToken):
