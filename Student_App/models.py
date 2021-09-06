@@ -12,6 +12,7 @@ class StudentModel(models.Model):
     name = models.CharField(max_length=50)
     roll = models.IntegerField()
     city = models.CharField(max_length=50)
+    department = models.CharField(max_length=100, default='Department')
 
 
 # Signal for creating token when user is created.

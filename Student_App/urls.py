@@ -16,6 +16,7 @@ router.register('studentapi', StudentViewSet, basename='student')
 
 urlpatterns = [
     path('', include(router.urls)),
+
     # adds login and logout system in our api.
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
     # path('gettoken/', CustomAuthToken.as_view()),

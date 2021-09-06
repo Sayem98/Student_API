@@ -16,6 +16,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .CustomAuth import CustomAuth
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.views import View
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 
 # Create your views here.
@@ -25,9 +27,9 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     # =======Authentications=====
     # authentication_classes = [BasicAuthentication] # Never use in deployment.
-    # authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication]
     # authentication_classes = [CustomAuth]
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
     # by admin panel token generate.
     # by cmd ---python manage.py drf_create_token user_1
     # by exposing an api endpoint By user.
@@ -42,6 +44,9 @@ class StudentViewSet(viewsets.ModelViewSet):
     # permission_classes = [DjangoModelPermissions]
     # same as django model permissions but unauthenticated user have view only.
     # permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+
+    # =========Throttling==========
+
 
 # Custom Token creator /gettoken is called by user
 # class CustomAuthToken(ObtainAuthToken):
